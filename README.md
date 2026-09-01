@@ -39,8 +39,8 @@ directamente entre sí:
 |---|---|---|
 | `POS_Presentacion` (+ `POS_Logica`, `POS_Datos`, `POS_Entidades`) | App de escritorio WPF — el POS real que usa el cajero | ✅ Sí |
 | `POS_API` | API mínima (ASP.NET Core) con un endpoint, `POST /api/productos/registrar`, para dar de alta productos desde el celular | ✅ Sí |
-| Página móvil (`PuntoDeVenta/index.html`) | HTML suelto con escáner de cámara (Bootstrap + html5-qrcode) que le pega a la API por HTTP en la misma red Wi-Fi | ❌ No — vive fuera de esta carpeta, todavía sin versionar |
-| `mapa_base_datos.sql` | Dump/snapshot del esquema MySQL | ❌ No — vive fuera de esta carpeta, todavía sin versionar |
+| Página móvil (`PuntoDeVenta/index.html`) | HTML suelto con escáner de cámara (Bootstrap + html5-qrcode) que le pega a la API por HTTP en la misma red Wi-Fi | ✅ Sí |
+| `mapa_base_datos.sql` | Dump/snapshot del esquema MySQL | ✅ Sí |
 
 La app WPF es el POS "de verdad"; la API + la página móvil son un atajo
 para no tener que dar de alta productos desde el teclado de la PC.
@@ -116,10 +116,8 @@ todavía — todo corre en modo simulador.**
   unificado.
 - **Limpieza pendiente**: `POS_API/WeatherForecast.cs` es el archivo de
   ejemplo por default de `dotnet new webapi`, sin usar.
-- **La página móvil y el dump de la base de datos** (`PuntoDeVenta/`,
-  `mapa_base_datos.sql`) todavía no están versionados en este repositorio.
-- **`IP_COMPUTADORA` hardcodeada** en la página móvil — si cambia la IP
-  local de la PC hay que editarla a mano ahí.
+- **`IP_COMPUTADORA` hardcodeada** en `PuntoDeVenta/index.html` — si cambia
+  la IP local de la PC hay que editarla a mano ahí.
 
 ## Esquema de base de datos (resumen)
 

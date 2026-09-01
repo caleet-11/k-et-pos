@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura de Inventario - POS Móvil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+/* TEMA OSCURO MÓVIL BLINDADO (Sin depender de Bootstrap) */
+body { 
+    background-color: #050505; 
+    color: #e6edf3; 
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+    margin: 0;
+    padding: 15px;
+}
+.card { 
+    background-color: #0d1117; 
+    border: 1px solid #30363d; 
+    border-radius: 16px; 
+    padding: 20px; 
+    box-shadow: 0 8px 24px rgba(0,0,0,0.8); 
+}
+.text-center { text-align: center; }
+.mb-4 { margin-bottom: 1.5rem; }
+
+/* Escáner */
+#lector-camara { width: 100%; border-radius: 12px; overflow: hidden; background-color: #000; border: 1px solid #1f6feb; }
+#lector-camara video { border-radius: 12px; }
+
+/* Botones del Escáner nativo */
+#lector-camara button {
+    padding: 10px 15px; border-radius: 8px; border: 1px solid #1f6feb; 
+    background-color: rgba(31, 111, 235, 0.1); color: #58a6ff; 
+    font-weight: bold; margin: 5px; font-size: 14px;
+}
+
+/* ========================================================= */
+/* CAJAS DE TEXTO MODERNAS (INPUTS)                          */
+/* ========================================================= */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+    width: 100%;
+}
+.input-row {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+.input-row .input-group {
+    flex: 1; /* Para que se dividan el espacio a la mitad */
+}
+
+.form-label { 
+    font-size: 0.85rem; 
+    color: #8b949e; 
+    margin-bottom: 6px; 
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.form-control { 
+    background-color: #010409; 
+    border: 1px solid #30363d; 
+    color: #ffffff; 
+    border-radius: 10px; 
+    padding: 14px 15px; 
+    font-size: 1rem; 
+    outline: none;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box; /* Evita que se salgan del borde */
+}
+.form-control:focus { 
+    border-color: #58a6ff; 
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.25); 
+    background-color: #0d1117;
+}
+
+/* ========================================================= */
+/* SWITCHES TIPO IOS/ANDROID NATIVO                          */
+/* ========================================================= */
+.switch-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #21262d;
+}
+.switch-label {
+    font-weight: 600;
+    color: #c9d1d9;
+}
+/* El switch oculto */
+.toggle-checkbox { display: none; }
+/* La pista del switch */
+.toggle-label {
+    width: 50px; height: 26px; background-color: #30363d;
+    border-radius: 50px; position: relative; cursor: pointer;
+    transition: background-color 0.3s;
+}
+/* La bolita del switch */
+.toggle-label::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 22px; height: 22px; background-color: white;
+    border-radius: 50%; transition: transform 0.3s;
+}
+.toggle-checkbox:checked + .toggle-label { background-color: #238636; }
+.toggle-checkbox:checked + .toggle-label::after { transform: translateX(24px); }
+
+/* Botón Principal */
+.btn-submit { 
+    background-color: #238636; color: white; border: none; 
+    border-radius: 12px; font-weight: bold; font-size: 1.1rem;
+    padding: 16px; width: 100%; margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(35, 134, 54, 0.3);
+    cursor: pointer;
+}
+.btn-submit:active { background-color: #2ea043; transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+<div class="container max-width-md my-4">
+    <div class="card p-4">
+        <h3 class="text-center mb-4 fw-bold text-white letter-spacing">ALTA DE PRODUCTO</h3>
+        
+        <div class="neon-box mb-4 text-center">
+            <i class="bi bi-upc-scan fs-1 text-primary mb-2 d-block" style="color: #58a6ff !important;"></i>
+            <div id="lector-camara"></div>
+        </div>
+
+        <form id="formProducto">
+            <div class="input-group">
+                <label class="form-label"><i class="bi bi-lock-fill"></i> Código Detectado</label>
+                <input type="text" class="form-control" id="codigo" required readonly placeholder="Esperando escaneo..." style="color: #58a6ff; font-weight: bold;">
+            </div>
+
+            <div class="input-group">
+                <label class="form-label"><i class="bi bi-box-seam"></i> Nombre del Artículo</label>
+                <input type="text" class="form-control" id="nombre" required placeholder="Ej. Coca Cola 600ml">
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label class="form-label"><i class="bi bi-tag"></i> Marca</label>
+                    <input type="text" class="form-control" id="marca" placeholder="Opcional">
+                </div>
+                <div class="input-group">
+                    <label class="form-label"><i class="bi bi-truck"></i> Proveedor</label>
+                    <input type="text" class="form-control" id="proveedor" placeholder="Opcional">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label class="form-label"><i class="bi bi-currency-dollar"></i> Costo</label>
+                    <input type="number" step="0.01" class="form-control" id="precioCosto" required placeholder="0.00">
+                </div>
+                <div class="input-group">
+                    <label class="form-label"><i class="bi bi-cart-plus"></i> Venta</label>
+                    <input type="number" step="0.01" class="form-control" id="precioVenta" required placeholder="0.00">
+                </div>
+                <div class="input-group">
+                    <label class="form-label"><i class="bi bi-bullseye"></i> Stock Ideal</label>
+                    <input type="number" step="1" class="form-control" id="stockIdeal" value="10">
+                </div>
+            </div>
+
+            <div class="switch-container">
+                <span class="switch-label">Llevar control de stock</span>
+                <input type="checkbox" id="controlaStock" class="toggle-checkbox" checked>
+                <label for="controlaStock" class="toggle-label"></label>
+            </div>
+            
+            <div class="switch-container" style="border-bottom: none;">
+                <span class="switch-label">Venta por pieza</span>
+                <input type="checkbox" id="seVendePorUnidad" class="toggle-checkbox" checked>
+                <label for="seVendePorUnidad" class="toggle-label"></label>
+            </div>
+
+            <button type="button" id="btnEnviar" class="btn-submit">
+                <i class="bi bi-cloud-arrow-up-fill"></i> GUARDAR EN COMPUTADORA
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // =========================================================================
+    // CONFIGURACIÓN: Reemplaza con la IP de tu PC
+    // =========================================================================
+    const IP_COMPUTADORA = "192.168.1.64"; 
+    const PUERTO_API = "5193";
+    const ENDPOINT = `http://${IP_COMPUTADORA}:${PUERTO_API}/api/productos/registrar`;
+
+    function onScanSuccess(decodedText, decodedResult) {
+        document.getElementById('codigo').value = decodedText;
+        if (navigator.vibrate) navigator.vibrate(100);
+    }
+
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "lector-camara", 
+        { fps: 15, qrbox: { width: 280, height: 150 }, rememberLastUsedCamera: true },
+        false
+    );
+    html5QrcodeScanner.render(onScanSuccess, (error) => {});
+
+    document.getElementById('btnEnviar').addEventListener('click', async () => {
+        const codigo = document.getElementById('codigo').value;
+        const nombre = document.getElementById('nombre').value;
+        const precioCosto = parseFloat(document.getElementById('precioCosto').value) || 0;
+        const precioVenta = parseFloat(document.getElementById('precioVenta').value) || 0;
+
+        if (!codigo || !nombre || precioVenta <= 0) {
+            alert("El código, nombre y precio de venta son obligatorios.");
+            return;
+        }
+
+        // Estructura JSON exacta para C#
+        const productoData = {
+            codigo: codigo,
+            nombre: nombre,
+            marca: document.getElementById('marca').value || "",
+            proveedor: document.getElementById('proveedor').value || "",
+            stock: 0, 
+            stockMinimo: 5,
+            stockIdeal: parseInt(document.getElementById('stockIdeal').value) || 10,
+            precioCosto: precioCosto,
+            precioVenta: precioVenta,
+            seVendePorUnidad: document.getElementById('seVendePorUnidad').checked,
+            controlaStock: document.getElementById('controlaStock').checked
+        };
+
+        try {
+            const response = await fetch(ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productoData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("¡Éxito!: " + data.mensaje);
+                document.getElementById('formProducto').reset();
+                document.getElementById('codigo').value = "";
+            } else {
+                alert("Error desde la PC: " + data.mensaje);
+            }
+        } catch (error) {
+            alert("Error de conexión. Verifica la IP y que la API esté encendida. Detalle: " + error.message);
+        }
+    });
+</script>
+
+</body>
+</html>
