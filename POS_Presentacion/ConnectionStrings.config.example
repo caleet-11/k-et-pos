@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<connectionStrings>
+	<add name="ConexionPOS" connectionString="Server=localhost;Database=PuntoDeVentaDB;Uid=root;Pwd=TU_PASSWORD_AQUI;Pooling=true;Min Pool Size=5;Max Pool Size=100;" providerName="MySql.Data.MySqlClient" />
+</connectionStrings>

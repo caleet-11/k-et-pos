@@ -1,0 +1,46 @@
+﻿<Window x:Class="POS_Presentacion.ProveedorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Registrar Proveedor" Height="480" Width="420" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="15"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Grid Margin="20">
+        <materialDesign:Card Padding="30" UniformCornerRadius="10" Background="White" VerticalAlignment="Center" materialDesign:ElevationAssist.Elevation="Dp3">
+            <StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,30">
+                    <materialDesign:PackIcon Kind="TruckDeliveryOutline" Width="32" Height="32" Foreground="{DynamicResource PrimaryHueMidBrush}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Nuevo Proveedor" FontSize="22" FontWeight="SemiBold" Foreground="#333333" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <TextBox x:Name="txtEmpresa" FontSize="16" Height="45" Margin="0,0,0,25" 
+                         materialDesign:HintAssist.Hint="Compañía / Marca (Ej. Muebles XYZ)" 
+                         materialDesign:HintAssist.IsFloating="True"/>
+
+                <TextBox x:Name="txtContacto" FontSize="16" Height="45" Margin="0,0,0,25" 
+                         materialDesign:HintAssist.Hint="Nombre del Repartidor / Contacto" 
+                         materialDesign:HintAssist.IsFloating="True"/>
+
+                <TextBox x:Name="txtTelefono" FontSize="16" Height="45" Margin="0,0,0,35" 
+                         materialDesign:HintAssist.Hint="Teléfono (10 dígitos)" 
+                         materialDesign:HintAssist.IsFloating="True"
+                         InputMethod.IsInputMethodEnabled="False"/>
+
+                <Button x:Name="btnGuardar" Height="48" Background="#2E7D32" BorderBrush="#2E7D32" Foreground="White" Click="BtnGuardar_Click" materialDesign:ButtonAssist.CornerRadius="5">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ContentSave" Width="22" Height="22" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="GUARDAR PROVEEDOR" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+        </materialDesign:Card>
+    </Grid>
+</Window>

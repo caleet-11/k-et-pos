@@ -1,0 +1,67 @@
+﻿<Window x:Class="POS_Presentacion.CajaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Control de Turno de Caja" Height="500" Width="480" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="15"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Grid Margin="20">
+
+        <StackPanel x:Name="panelApertura" Visibility="Collapsed" VerticalAlignment="Center">
+            <materialDesign:Card Padding="25" UniformCornerRadius="10" Background="#FFF4FBF5">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="CashRegister" Width="48" Height="48" Foreground="#2E7D32" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock Text="APERTURA DE TURNO" FontSize="22" FontWeight="Bold" Foreground="#2E7D32" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock Text="Ingresa la cantidad de dinero en efectivo con la que inicias en caja (Fondo para dar cambios)." TextWrapping="Wrap" FontSize="14" Foreground="#555" Margin="0,0,0,25" HorizontalAlignment="Center" TextAlignment="Center"/>
+
+                    <TextBox x:Name="txtMontoApertura" FontSize="24" Margin="0,0,0,30" Text="0.00" 
+                             materialDesign:HintAssist.Hint="Monto Inicial ($)" 
+                             materialDesign:HintAssist.IsFloating="True"
+                             HorizontalContentAlignment="Center"/>
+
+                    <Button Content="ACEPTAR FONDO DE CAJA" Background="#2E7D32" BorderBrush="#2E7D32" Foreground="White" FontSize="16" Height="45" Click="BtnAbrir_Click" materialDesign:ButtonAssist.CornerRadius="5"/>
+                </StackPanel>
+            </materialDesign:Card>
+        </StackPanel>
+
+        <StackPanel x:Name="panelCierre" Visibility="Collapsed" VerticalAlignment="Center">
+            <materialDesign:Card Padding="25" UniformCornerRadius="10" Background="#FFFFFAFA">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="LockOutline" Width="40" Height="40" Foreground="#D32F2F" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock Text="ARQUEO / CORTE DE CAJA" FontSize="22" FontWeight="Bold" Foreground="#D32F2F" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                    <Grid Margin="0,0,0,10">
+                        <TextBlock Text="Fondo de Caja Inicial:" FontSize="15" Foreground="#555"/>
+                        <TextBlock x:Name="lblFondoInicial" Text="$0.00" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,15">
+                        <TextBlock Text="(+) Ingresos del Turno:" FontSize="15" Foreground="#555"/>
+                        <TextBlock x:Name="lblVentasEfectivo" Text="$0.00" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                    </Grid>
+
+                    <Separator Margin="0,5,0,15" Background="#E0E0E0"/>
+
+                    <Grid Margin="0,0,0,25">
+                        <TextBlock Text="Total Esperado en Caja:" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock x:Name="lblTotalEsperado" Text="$0.00" FontSize="20" FontWeight="Bold" Foreground="#1976D2" HorizontalAlignment="Right"/>
+                    </Grid>
+
+                    <TextBox x:Name="txtMontoReal" FontSize="24" Margin="0,0,0,25" 
+                             materialDesign:HintAssist.Hint="Dinero físico REAL en caja ($)" 
+                             materialDesign:HintAssist.IsFloating="True"
+                             HorizontalContentAlignment="Center"/>
+
+                    <Button Content="PROCESAR CORTE Y CERRAR" Background="#D32F2F" BorderBrush="#D32F2F" Foreground="White" FontSize="16" Height="45" Click="BtnCerrar_Click" materialDesign:ButtonAssist.CornerRadius="5"/>
+                </StackPanel>
+            </materialDesign:Card>
+        </StackPanel>
+
+    </Grid>
+</Window>

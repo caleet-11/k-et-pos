@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+packages/
+*.user
+*.suo
+
+# Cadena de conexión real (contiene contraseña) - NO subir
+POS_Presentacion/ConnectionStrings.config

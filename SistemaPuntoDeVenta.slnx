@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="POS_API/POS_API.csproj" />
+  <Project Path="POS_Datos/POS_Datos.csproj" Id="d7606b97-9116-4e94-83fa-0ff4b9b6cdb0" />
+  <Project Path="POS_Entidades/POS_Entidades.csproj" Id="dd9a8564-ea17-41c3-a4f0-7984a9c49d9f" />
+  <Project Path="POS_Logica/POS_Logica.csproj" Id="221dd96b-1b28-4d98-b839-5d6eaeeb3828" />
+  <Project Path="POS_Presentacion/POS_Presentacion.csproj" Id="0aca21c0-3824-402f-bb2b-25f2a5725e81" />
+</Solution>
